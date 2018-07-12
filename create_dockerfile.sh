@@ -18,18 +18,21 @@ docker run --rm kaczmarj/neurodocker:master generate docker \
            --run 'mkdir /data && chmod 777 /data && chmod a+s /data' \
            --run 'mkdir /output && chmod 777 /output && chmod a+s /output' \
            --run 'mkdir /templates && chmod 777 /templates && chmod a+s /templates' \
+           --run 'chown -R neuro /home/neuro' \
            --run 'rm -rf /opt/conda/pkgs/*' \
            --user=neuro \
-           --run 'curl -L -o /data/dataset.zip https://www.dropbox.com/s/nc35aqbwnpzv7wr/dataset.zip?dl=1 && unzip /data/dataset.zip -d /data/ && rm /data/dataset.zip' \
-           --run 'curl -L -o /output/datasink.zip https://www.dropbox.com/s/rrc9ojtolft8pnv/datasink.zip?dl=1 && unzip /output/datasink.zip -d /output/ && rm /output/datasink.zip' \
+           --run 'curl -J -L -o /data/dataset.zip https://www.dropbox.com/sh/fvvium3z3l0wedo/AACkFi2mhWZkcqwmHjO8WwUra?dl=1 && mkdir /data/dataset && unzip /data/dataset.zip -d /data/dataset/ -x /' \
+           --run 'curl -J -L -o /output/datasink.zip https://www.dropbox.com/sh/dcm0owd4g0028nf/AAAqtZZPusTwbhBrygKXqQNna?dl=1 && mkdir /output/datasink && unzip /output/datasink.zip -d /output/datasink/ -x /' \
            --copy templates "/templates" \
            --copy notebooks "/home/neuro/notebooks" \
            --copy slides "/home/neuro/slides" \
            --copy program.ipynb "/home/neuro/program.ipynb" \
            --copy test_notebooks.py "/home/neuro/test_notebooks.py" \
            --run 'mkdir -p ~/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > ~/.jupyter/jupyter_notebook_config.py' \
-           --workdir /home/neuro \
            --user=root \
            --run 'chown -R neuro /home/neuro' \
            --user=neuro \
+           --workdir /home/neuro \
            --cmd "jupyter-notebook" > Dockerfile
+
+
